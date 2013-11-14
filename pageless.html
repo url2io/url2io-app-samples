@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>pageless | URL2</title>
+  <style type="text/css">
+    body {
+      margin: 0px;
+    }
+    .header {
+      padding: 20px;
+    }
+    .danlv {
+      background-color: #2B9646;
+    }
+    .header h1 {
+      text-align: center;
+      color: white;
+    }
+    .page:before {
+      content: ""attr(id)"";
+      background: purple;
+      padding: 1px;
+      color: white;
+    }
+    .search-box {
+      height: 28px;
+      border: 1px solid #cccccc;
+      padding: 0px 6px;
+      margin: 0px;
+      width: 60%;
+    }
+    .search-box:focus {
+      border: 1px solid #4d90fe; 
+      outline: 0;
+      outline: thin dotted \9;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(82,168,236,0.6);
+         -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(82,168,236,0.6);
+              box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(82,168,236,0.6);
+    }
+    .search-box:hover {
+      border: 1px solid #d9d9d9;
+      outline: 0;
+      outline: thin dotted \9;
+    }
+    button#btn-go {
+      height: 30px;
+      border: none;
+      padding: 6px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      margin: 0px;
+      opacity: 0.9;
+    }
+    button#btn-go:hover {
+      opacity: 1;
+    }
+    div.search {
+      text-align: center;
+      width: 70%;
+      margin: auto;
+    }    
+    .container {
+      padding: 20px;
+    }
+    .container img {
+      display: block;
+      max-width: 100%;
+    }
+    #articleHeader {
+      border-bottom: 1px solid #c5c5c5;
+    }
+    @media (max-width: 767px) {
+      .search-box {
+        width: 80%;
+      }
+    }
+    .footer {
+      color: #2B9646;
+    }
+    .ribbon {
+      background: #a00;
+      overflow: hidden;
+      position: absolute;
+      right: -3em;
+      top: 2.5em;
+      -webkit-transform: rotate(45deg);
+         -moz-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+           -o-transform: rotate(45deg);
+              transform: rotate(45deg);
+    }
+    .ribbon a {
+      color: #fff;
+      display: block;
+      font: bold 81.25% 'Helvetiva Neue', Helvetica, Arial, sans-serif;
+      margin: 0.05em 0 0.075em 0;
+      padding: 0.5em 3.5em;
+      text-align: center;
+      text-decoration: none;
+    }
+    .fork-me-on-github {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  </style>
+</head>
+<body>
+<a class='fork-me-on-github' href="https://github.com/url2/url2-app-samples" target='_blank'>
+  <img src="/static/img/fork-me-on-github.png" alt="" />
+</a>
+<div class='header danlv'>
+  <h1>Pageless</h1>
+  <div class='search'>
+    <form id='fs'>
+      <input id="url" name='url' class='search-box' type="text" placeholder='输入url...'/>
+      <button id='btn-go' onclick='add_article($("#url").val());return false;'>GO</button>
+  </form>
+  </div>
+</div>
+<div class="container">
+  <div id="pageless">
+    <div id="article">
+      <!-- page 1 -->
+      <div id='pageless-wrap'>
+      </div>
+      <!-- page 2 -->
+    </div>
+    <img src="/static/img/loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
+  </div>
+</div>
+
+<!-- 模板  article -->
+<script type="text/template" id='article_template'>
+  <div id="pageless-wrap">
+     <div id="articleHeader">
+       <h2>{{title}}</h2>
+     </div>
+     <div>
+       <h3>下一页: {{next}}</h3>
+     </div>
+     <div id="page1" class='page'>
+       {{&content}}
+     </div>
+     <i><a href="{{url}}">origin</a></i>
+     <div class='footer'>
+       <hr>
+       <center>Powered by <a href="http://url2.droprest.com" target='_blank'>URL2</a></center>
+     </div>
+  </div>
+</script>
+<!-- 模板 page -->
+<script type="text/template" id="page_template" >
+  <div id="page{{pn}}" class='page'>
+    <div>{{title}} {{url}}</div>
+    {{&content}}
+  </div>
+</script>
+<!-- js -->
+<script type="text/javascript" src='/static/js/jquery-1.9.1.min.js'></script>
+<script type='text/javascript' src='/static/js/jquery.mustache.js'></script>
+<script type="text/javascript">
+  var sentry = 1;
+
+  function get_data(url, callback) {
+    $.ajax({
+        'type': 'get',
+        'url': '/api/article', // 需要替换为 http://url2.droprest.com/api/article
+        'dataType': 'jsonp',
+        'data': {
+          'url': url, 
+          'next': '',
+        },
+        'success': callback, 
+    });
+  }
+
+  function add_article(url) {
+      // disable the previous article's next page
+      $(window).off('scroll', pageless_scroll_handler);
+      $('#pageless-wrap').remove();
+      $('#loading').css({'display': 'block'});
+      get_data(url, function (data) {
+          // show
+          $('#article').append($('#article_template').mustache(data));
+          sentry = 1;
+          $('#loading').css({'display': 'none'});
+          // next
+          lazy_load(data.next);
+      });
+      return false;
+  }
+
+  function add_page(url) {
+      $('#loading').css({'display': 'block'});
+      get_data(url, function(data) {
+          $('#loading').css({'display': 'none'});
+          pre_page = $("#page"+sentry);
+          sentry +=1;
+          data['pn'] = sentry;
+          var page = $("#page_template").mustache(data);
+          // show
+          page.insertAfter(pre_page);
+          // next
+          lazy_load(data.next);
+      });
+  }
+
+  function lazy_load(url) {
+      if (!url) return;
+      // next
+      if ($(window).height() >= $(document).height())
+          add_page(url);// bottom_less_handler
+      else
+          $(window).on('scroll', {url:url}, pageless_scroll_handler);// scroll_bottom_handler
+  }
+
+  function pageless_scroll_handler(event) {
+      if ($(document).scrollTop()+$(window).height() > $(document).height() - 50) {
+          $(window).off('scroll', pageless_scroll_handler);
+          add_page(event.data.url);
+      }
+  }
+
+  window.onload = function () {
+      // auto loading next page
+      lazy_load($('#next_page').attr('next_page'));
+      document.forms.fs.url.focus();
+      // info
+      console.info('pageless源代码可在Github获得\nhttps://github.com/url2');
+  };
+</script>
+</body>
+</html>

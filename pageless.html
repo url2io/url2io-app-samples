@@ -105,11 +105,14 @@
       top: 0px;
       right: 0px;
     }
+    .error h2 {
+      color: red;
+    }
   </style>
 </head>
 <body>
 <a class='fork-me-on-github' href="https://github.com/url2/url2-app-samples" target='_blank'>
-  <img src="/static/img/fork-me-on-github.png" alt="" />
+  <img src="static/img/fork-me-on-github.png" alt="" />
 </a>
 <div class='header danlv'>
   <h1>Pageless</h1>
@@ -121,15 +124,10 @@
   </div>
 </div>
 <div class="container">
-  <div id="pageless">
-    <div id="article">
-      <!-- page 1 -->
-      <div id='pageless-wrap'>
-      </div>
-      <!-- page 2 -->
-    </div>
-    <img src="/static/img/loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
+  <div id="article">
+    <!-- pages -->
   </div>
+  <img src="static/img/loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
 </div>
 
 <!-- 模板  article -->
@@ -141,10 +139,9 @@
      <div>
        <h3>下一页: {{next}}</h3>
      </div>
-     <div id="page1" class='page'>
-       {{&content}}
-     </div>
-     <i><a href="{{url}}">origin</a></i>
+     {{>page}}
+     <div><a href="{{url}}" target='__blank'>原始地址</a></div>
+     <!-- footer -->
      <div class='footer'>
        <hr>
        <center>Powered by <a href="http://url2.droprest.com" target='_blank'>URL2</a></center>
@@ -153,21 +150,35 @@
 </script>
 <!-- 模板 page -->
 <script type="text/template" id="page_template" >
-  <div id="page{{pn}}" class='page'>
+  <div id="page{{page_number}}" class='page'>
     <div>{{title}} {{url}}</div>
     {{&content}}
   </div>
 </script>
+<!-- 模板 错误提示 -->
+<script type="text/template" id='error_template'>
+  <div class='error'>
+    <h2>Oops, wrong</h2>
+    <table>
+      <tr><td>error type</td><td>: "{{error}}"</td></tr>
+      <tr><td>message</td><td>: "{{msg}}"</td></tr>
+      <tr><td>url</td><td>: "{{url}}"</td></tr>
+      {{#code}}<tr><td>code</td><td>: "{{code}}"</td></tr>{{/code}}
+      {{#type}}<tr><td>type</td><td>: "{{type}}"</td></tr>{{/type}}
+    </table>
+  </div>
+</script>
 <!-- js -->
-<script type="text/javascript" src='/static/js/jquery-1.9.1.min.js'></script>
-<script type='text/javascript' src='/static/js/jquery.mustache.js'></script>
+<script type="text/javascript" src='static/js/jquery-1.9.1.min.js'></script>
+<script type='text/javascript' src='static/js/jquery.mustache.js'></script>
 <script type="text/javascript">
-  var sentry = 1;
+  var page_number;
 
+  // 调用url2article api获得数据
   function get_data(url, callback) {
     $.ajax({
         'type': 'get',
-        'url': '/api/article', // 需要替换为 http://url2.droprest.com/api/article
+        'url': 'http://localhost:8080/api/article', // 需要替换为 http://url2.droprest.com/api/article
         'dataType': 'jsonp',
         'data': {
           'url': url, 
@@ -177,37 +188,52 @@
     });
   }
 
+  // 添加文章到页面
   function add_article(url) {
-      // disable the previous article's next page
+      // disable the previous article's pageless_scroll_handler
       $(window).off('scroll', pageless_scroll_handler);
       $('#pageless-wrap').remove();
       $('#loading').css({'display': 'block'});
       get_data(url, function (data) {
-          // show
-          $('#article').append($('#article_template').mustache(data));
-          sentry = 1;
-          $('#loading').css({'display': 'none'});
+          page_number = 1;
+          data['page_number'] = page_number;
+
+          // render to show
+          $('#article').append(
+              check_error(data) || 
+              $('#article_template').mustache(data, {'page':$('#page_template').html()})
+          );
+
           // next
           lazy_load(data.next);
+          $('#loading').css({'display': 'none'});
       });
       return false;
   }
 
+  // 加载下一页
   function add_page(url) {
       $('#loading').css({'display': 'block'});
       get_data(url, function(data) {
-          $('#loading').css({'display': 'none'});
-          pre_page = $("#page"+sentry);
-          sentry +=1;
-          data['pn'] = sentry;
-          var page = $("#page_template").mustache(data);
-          // show
+          pre_page = $("#page"+page_number);
+          data['page_number'] = ++page_number;
+
+          // render to show
+          var page = check_error(data) || $("#page_template").mustache(data);
           page.insertAfter(pre_page);
+
           // next
           lazy_load(data.next);
+          $('#loading').css({'display': 'none'});
       });
   }
 
+  // 检查返回的数据
+  function check_error(data) {
+      return data.error ? $('#error_template').mustache(data) : false;
+  }
+
+  // 延时加载
   function lazy_load(url) {
       if (!url) return;
       // next
@@ -217,6 +243,7 @@
           $(window).on('scroll', {url:url}, pageless_scroll_handler);// scroll_bottom_handler
   }
 
+  // 页面滚动处理程序
   function pageless_scroll_handler(event) {
       if ($(document).scrollTop()+$(window).height() > $(document).height() - 50) {
           $(window).off('scroll', pageless_scroll_handler);
@@ -225,11 +252,13 @@
   }
 
   window.onload = function () {
-      // auto loading next page
-      lazy_load($('#next_page').attr('next_page'));
+      //lazy_load($('#next_page').attr('next_page'));
       document.forms.fs.url.focus();
+
       // info
-      console.info('pageless源代码可在Github获得\nhttps://github.com/url2');
+      window.console = window.console || {};
+      console.log || (console.log = opera.postError);
+      console.log('pageless源代码可在Github获得\nhttps://github.com/url2/url2-app-samples');
   };
 </script>
 </body>

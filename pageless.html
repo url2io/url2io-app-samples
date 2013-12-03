@@ -176,16 +176,28 @@
   var page_number;
 
   // 调用url2article api获得数据
-  function get_data(url, callback) {
+  function get_data(url, callback, repeat) {
+    var repeat = repeat || (repeat == 0 ? 0 : 2);
     $.ajax({
         'type': 'get',
-        'url': 'http://localhost:8080/api/article', // 需要替换为 http://url2.droprest.com/api/article
+        'url': 'http://url2.droprest.com/api/article',
         'dataType': 'jsonp',
+        'timeout': 10000,
         'data': {
           'url': url, 
           'next': '',
         },
         'success': callback, 
+        'error': function(jqXHR, textStatus, errorThrown) {
+            console.log('fail', textStatus);
+            if (repeat >= 1) {
+                repeat--;
+                get_data(url, callback, repeat);
+                console.log('repeat again, remain', repeat);
+            } else {
+                $('#loading').css({'display': 'none'});
+            }
+        },
     });
   }
 

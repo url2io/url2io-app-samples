@@ -213,7 +213,7 @@
     var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
-        'url': 'http:localhost:8080/api/article',
+        'url': '/api/article', // 需改为 http://url2.droprest.com/api/article'
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {

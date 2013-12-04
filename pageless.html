@@ -182,7 +182,7 @@
 </script>
 <!-- 模板 page -->
 <script type="text/template" id="page_template" >
-  <div id="p{{page_number}}" class='content page'>
+  <div id="page{{page_number}}" class='content page'>
     <div class='ft'> {{page_number}} </div>
     <div>{{title}} {{url}}</div>
     {{&content}}
@@ -210,12 +210,12 @@
 
   // 调用url2article api获得数据
   function get_data(url, callback, repeat) {
-    var repeat = repeat || (repeat == 0 ? 0 : 2);
+    var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
         'url': 'http:localhost:8080/api/article',
         'dataType': 'jsonp',
-        'timeout': 10000,
+        'timeout': 30000,
         'data': {
           'url': url, 
           'next': '',

@@ -13,7 +13,7 @@
       margin: 0px;
     }
     .header {
-      padding: 20px;
+      padding-bottom: 20px;
       height: 100px;
     }
     .danlv {
@@ -94,6 +94,12 @@
     .footer {
       color: #2B9646;
     }
+    .gotop {
+      position: fixed;
+      font-size: 0.8em;
+      bottom: 30px;
+      right: 10%;
+    }
     .ribbon {
       background: #a00;
       overflow: hidden;
@@ -123,6 +129,65 @@
     .error h2 {
       color: red;
     }
+    /* url list pane */
+    #url-list-pane {
+      position: fixed;
+      width: 280px;
+      left: -285px;
+      border: 1px solid black;
+      background-color: white;
+      z-index: 1000;
+    }
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+      padding-right: 5px;
+    }
+    .close:hover {
+      color: red;
+    }
+    .url-list {
+      list-style: none;
+      font-size: 13px;
+    }
+    .url-cell {
+      border-top: 1px dotted;
+      padding: 5px;
+      cursor: pointer;
+    }
+    .url-cell:hover {
+      background-color: #EEEEEE;
+    }
+    .show-pane {
+      position: fixed;
+      width: 40px;
+      top: 50%;
+      margin-top: -50px;
+      left: -35px;
+      background-color: #2AAF4C;
+      color: #fff;
+      text-align: right;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 20px 5px;
+      -webkit-border-radius: 5px;
+         -moz-border-radius: 5px;
+              border-radius: 5px;
+      z-index: 900;
+      -webkit-transition:all 0.2s linear !important;
+         -moz-transition:all 0.2s linear !important;
+          -ms-transition:all 0.2s linear !important;
+           -o-transition:all 0.2s linear !important;
+              transition:all 0.2s linear !important;
+    }
+    .show-pane:hover {
+      text-decoration: none;
+      left: -20px;
+    }
+
     /* Responsive *\
     \* ========== */
     @media (max-width: 767px) {
@@ -142,13 +207,16 @@
         position: relative;
         left: 0px;
       }
+      .gotop {
+        right: 10px;
+      }
     }
   </style>
 </head>
 <body>
 <div class='header danlv'>
   <a class='fork-me-on-github' href="https://github.com/url2/url2-app-samples" target='_blank'>
-    <img src="static/img/fork-me-on-github.png" alt="" />
+    <img style='zoom: 0.8' src="static/img/fork-me-on-github.png" alt="" />
   </a>
   <h1>Pageless</h1>
   <div class='search'>
@@ -158,6 +226,29 @@
   </form>
   </div>
 </div>
+<!-- url-list-pane 
+     ============= -->
+<a href="javascript:void(0);" class='show-pane'>&gt;</a>
+<div id="url-list-pane">
+  <div class="close">x</div>
+  <center><h4><b>测试url</b></h4></center>
+  <h5 style='color:#66bc4e'>下一页</h5>
+  <ul class="url-list">
+    <li class="url-cell" src-data="http://tech.sina.com.cn/i/2010-08-18/19554560539.shtml">Web已死 Internet永生 -《连线》杂志</li>
+    <li class="url-cell" src-data="http://www.qiushibaike.com/">8小时内最尴尬糗事::糗事百科</li>
+    <li class="url-cell" src-data="http://www.36kr.com">36氪 | 关注互联网创业</li>
+  </ul>
+  <h5 style='color:#66bc4e'>正文提取</h5>
+  <ul class="url-list">
+    <li class="url-cell" src-data="http://select.yeeyan.org/view/338874/352344">别了,Google Reader</li>
+    <li class="url-cell" src-data="http://typo.sofish.de/">中文网页重设与排版：TYPO.CSS</li>
+    <li class="url-cell" src-data="http://www.36kr.com/p/208498.html">Oculus Rift的性感极客们到底是如何破解晕眩感的</li>
+    <li class="url-cell" src-data="http://www.36kr.com/p/208636.html">为什么这八家机器人公司可以吸引Andy Rubin，你了解它们吗？</li>
+    <li class="url-cell" src-data="http://www.36kr.com/p/167423.html">永不离线: 可穿戴式计算技术是移动的未来？</li>
+    <li class="url-cell" src-data="http://url2.droprest.com/docs">URL2 API 文档</li>
+  </ul>
+</div>
+
 <!-- article 
      ======= -->
 <div class="container typo">
@@ -165,6 +256,10 @@
     <!-- pages -->
   </div>
   <img src="static/img/loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
+</div>
+<!-- go to top -->
+<div class='gotop'>
+  <a href='#'>↑回顶部</a>
 </div>
 
 <!-- 模板  article -->
@@ -213,7 +308,7 @@
     var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
-        'url': '/api/article', // 需改为 http://url2.droprest.com/api/article'
+        'url': 'http://localhost:8080/api/article', // 需改为 http://url2.droprest.com/api/article'
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
@@ -305,6 +400,25 @@
       window.console = window.console || {};
       console.log || (console.log = opera.postError);
       console.log('pageless源代码可在Github获得\nhttps://github.com/url2/url2-app-samples');
+
+      // url to test
+      $('#url-list-pane ul.url-list li').each(function(e,t){
+          $(t).on('click', function() {
+              add_article($(t).attr('src-data'));
+          });
+      });
+      // show  pane
+      $('.show-pane').on('click', function() {
+          $('#url-list-pane').animate({
+              left: '0px',
+          }, 500);
+      });
+      // close pane
+      $('#url-list-pane div.close').on('click', function() {
+          $('#url-list-pane').animate({
+              left: '-'+(parseInt($('#url-list-pane').css('width'),10)+5)+'px',
+          }, 500);
+      });
   };
 </script>
 </body>

@@ -265,7 +265,7 @@
 <!-- 模板  article -->
 <script type="text/template" id='article_template'>
   <div id="pageless-wrap">
-     <h1 class="title">{{title}}</h1><hr/>
+     <h1 class="title">{{title}}</h1>
      {{>page}}
      <div><a href="{{url}}" target='__blank'>原始地址</a></div>
      <!-- footer -->
@@ -279,7 +279,6 @@
 <script type="text/template" id="page_template" >
   <div id="page{{page_number}}" class='content page'>
     <div class='ft'> {{page_number}} </div>
-    <div>{{title}} {{url}}</div>
     {{&content}}
   </div>
 </script>
@@ -308,12 +307,12 @@
     var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
-        'url': 'http://localhost:8080/api/article', // 需改为 http://url2.droprest.com/api/article'
+        'url': 'http://url2api.sinaapp.com/article',
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
           'url': url, 
-          'next': '',
+          'next': true,
         },
         'success': callback, 
         'error': function(jqXHR, textStatus, errorThrown) {

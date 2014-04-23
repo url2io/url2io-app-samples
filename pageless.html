@@ -265,7 +265,7 @@
 <!-- 模板  article -->
 <script type="text/template" id='article_template'>
   <div id="pageless-wrap">
-     <h1 class="title">{{title}}</h1>
+    <center><h1 class="title">{{title}}</h1></center>
      {{>page}}
      <div><a href="{{url}}" target='__blank'>原始地址</a></div>
      <!-- footer -->
@@ -308,11 +308,12 @@
     $.ajax({
         'type': 'get',
         'url': 'http://url2api.sinaapp.com/article',
+      //'url': 'http://localhost:8080/article',
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
           'url': url, 
-          'next': true,
+          'fields': 'next',
         },
         'success': callback, 
         'error': function(jqXHR, textStatus, errorThrown) {

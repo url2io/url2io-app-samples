@@ -1,0 +1,261 @@
+/* version@commit:19a15d6d374453be373b946df98c390faa96a547
+ * TYPO.CSS - a better way to manage the typography of your Chinese-lang-base site.
+
+ * Copyright (C) 2012 Sofish Lin http://sofish.de
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+@charset "utf-8";
+
+/* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+html { color: #444333; background: #fff; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; text-rendering: optimizelegibility; } /* 内外边距通常让各个浏览器样式的表现位置不同 */ body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { margin: 0; padding: 0; } /* 重设 HTML5 标签, IE 需要在 js 中 createElement(TAG) */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } /* HTML5 媒体文件跟 img 保持一致 */ audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; } /* 要注意表单元素并不继承父级 font 的问题 */ body, button, input, select, textarea { font:500 0.875em/1.8 Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif; } /* 去除 IE6 input/button 多余的空白 */ button, input { *width: auto; *overflow: visible; /* 让 input 和 button 一样高 */ line-height: normal; } button::-moz-focus-inner, input::-moz-focus-inner { padding: 0; border: 0; } /* 去掉各Table  cell 的边距并让其边重合 */ table { border-collapse: collapse; border-spacing: 0; } /* IE bug fixed: th 不继承 text-align*/ th { text-align: inherit; } /* 去除默认边框 */ fieldset, img { border: 0; } /* 解决 IE6-7 图片缩放锯齿问题 */ img { -ms-interpolation-mode: bicubic;    } /* ie6 7 8(q) bug 显示为行内表现 */ iframe { display: block; } /* 块/段落引用 */ blockquote { font-family:Optima, Georgia, STSong, serif; margin: 1em 0; color:#999; padding: 0.6em 1em; background:#f8f8f8; border-left: 0.4em solid #ddd; } blockquote blockquote { padding: 0 0 0 1em; margin-left: 2em; } blockquote p { margin-bottom: 0; } /* Firefox 以外，元素没有下划线，需添加 */ acronym, abbr { border-bottom: 1px dotted; font-variant: normal; } /* 添加鼠标问号，进一步确保应用的语义是正确的（要知道，交互他们也有洁癖，如果你不去掉，那得多花点口舌） */ abbr { cursor: help; } /* 一致的 del 样式 */ del { text-decoration: line-through; } address, caption, cite, code, dfn, em, th, var { font-style: normal; font-weight: 400; } /* 去掉列表前的标识, li 会继承，大部分网站通常用列表来很多内容，所以应该当去 */ ul, ol { list-style: none; } /* 对齐是排版最重要的因素, 别让什么都居中 */ caption, th { text-align: left; } q:before, q:after { content: ''; } /* 统一上标和下标 */ sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: text-top\9; } :root sub, :root sup{ vertical-align: baseline; /* for ie9 and other mordern browsers */ } sup { top: -0.5em; } sub { bottom: -0.25em; } /* 让链接在 hover 状态下显示下划线 */ a:hover { text-decoration: underline; } /* 默认不显示下划线，保持页面简洁 */ ins, a { text-decoration: none; } /* 专名号：虽然 u 已经重回 html5 Draft，但在所有浏览器中都是可以使用的， * 要做到更好，向后兼容的话，添加 class="typo-u" 来显示专名号 * 关于 <u> 标签：http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-u-element * 被放弃的是 4，之前一直搞错 http://www.w3.org/TR/html401/appendix/changes.html#idx-deprecated * 一篇关于 <u> 标签的很好文章：http://html5doctor.com/u-element/ */ u, .typo-u { text-decoration: underline; } /* 标记，类似于手写的荧光笔的作用 */ mark { background: #fffdd1; } /* 代码片断 */ pre, code { font-family: "Courier New", Courier, monospace; white-space: pre-wrap; word-wrap: break-word; } pre { background: #f8f8f8; border:1px solid #ddd; padding: 1em 1.5em; } /* 一致化 horizonal rule */ hr{ border:none; border-bottom:1px solid #cfcfcf; margin-bottom:10px; *color:pink;*filter:chroma(color=pink); height:10px; *margin:-7px 0 2px; } /* 底部印刷体、版本等标记 */ small, .typo-small, /* 图片说明 */ figcaption { font-size: 0.9em; color: #888; } /* 可拖动文件添加拖动手势 */ [draggable] { cursor: move; } .clearfix:before, .clearfix:after { content: ""; display: table; } .clearfix:after { clear: both } .clearfix { zoom: 1 } /* 强制文本换行 */ .textwrap, .textwrap td, .textwrap th{ word-wrap:break-word; word-break:break-all; } .textwrap-table{ table-layout:fixed; } /* 提供 serif 版本的字体设置 */ .serif{font-family:Palatino, Hiragino Mincho ProN W3, Optima, STSong, Georgia, serif;} /* 保证块/段落之间的空白隔行 */ .typo p, .typo pre, .typo ul, .typo ol, .typo dl, .typo form, .typo hr, .typo table, .typo-p, .typo-pre, .typo-ul, .typo-ol, .typo-dl, .typo-form, .typo-hr, .typo-table { margin-bottom: 1.2em; } h1, h2, h3, h4, h5, h6{ font-weight: 500; *font-weight: 800; font-family: Helvetica Neue, Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif; color:#333; } /* 标题应该更贴紧内容，并与其他块区分，margin 值要相应做优化 */ .typo h1, .typo h2, .typo h3, .typo h4, .typo h5, .typo h6, .typo-h1, .typo-h2, .typo-h3, .typo-h4, .typo-h5, .typo-h6 { margin-bottom: 0.4em; line-height: 1.5; } .typo h1, .typo-h1 { font-size: 1.8em; } .typo h2, .typo-h2 { font-size: 1.6em; } .typo h3, .typo-h3 { font-size: 1.4em; } .typo h4, .typo-h4 { font-size: 1.2em; } .typo h5, .typo h6, .typo-h5, .typo-h6 { font-size: 1em; } /* 在文章中，应该还原 ul 和 ol 的样式 */ .typo ul, .typo-ul { margin-left: 1.3em; list-style: disc; } .typo ol, .typo-ol { list-style: decimal; margin-left: 1.9em; } .typo li ul, .typo li ol, .typo-ul ul, .typo-ul ol, .typo-ol ul, .typo-ol ol { margin-top: 0; margin-bottom: 0; margin-left: 2em; } .typo li ul, .typo-ul ul, .typo-ol ul { list-style: circle; } /* 同 ul/ol，在文章中应用 table 基本格式 */ .typo table th, .typo table td, .typo-table th, .typo-table td .typo table caption{ border: 1px solid #ddd; padding: 0.5em 1em; color:#666; } .typo table th, .typo-table th { background: #fbfbfb; } .typo table thead th, .typo-table thead th { background: #f1f1f1; } .typo table caption { border-bottom:none; } /* 去除 webkit 中 input 和 textarea 的默认样式  */ .typo-input, .typo-textarea{ -webkit-appearance:none; border-radius:0; } /* 高亮选中 */ ::-moz-selection { background:#08c; color:#fff; } ::selection { background:#08c; color:#fff; } /* TODO: 供着重号使用 */ .typo-em, .typo em, legend, caption {font-weight: 700;}
+/* pageless */
+html { font-size: 100%;}
+body { margin: 0px;}
+.container {
+  padding: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 700px;
+}
+.content img { display: block; max-width: 100%;}
+.article h1.title {
+  font-family: Georgia,"Times New Roman",Times,"Kai","Kaiti SC","KaiTi","BiauKai","楷体","楷体_GB2312",serif;
+  font-weight: 700;
+  font-size: 39px;
+}
+.page { position: relative;}
+.footer { color: #2B9646;}
+.gotop { position: fixed; font-size: 0.8em; bottom: 30px; right: 10%;}
+.error h2 { color: red;}
+.ft {
+  position: absolute;
+  width: 32px;
+  height: 20px;
+  top: 0px;
+  left: -36px;
+  font-size: 10px;
+  text-align: center;
+  background: #d1d0c8;
+}
+/* url list pane */
+.url-list-pane {
+  position: fixed;
+  width: 280px;
+  height: 100%;
+  top: 0px;
+  left: -300px;
+  z-index: 1000;
+  opacity: 0.9;
+  overflow-y: auto;
+  -webkit-transition: 0.4s all ease-in-out;
+     -moz-transition: 0.4s all ease-in-out;
+      -ms-transition: 0.4s all ease-in-out;
+       -o-transition: 0.4s all ease-in-out;
+          transition: 0.4s all ease-in-out;
+}
+.on {
+  -webkit-transform:translate(300px, 0px);
+     -moz-transform:translate(300px, 0px);
+      -ms-transform:translate(300px, 0px);
+       -o-transform:translate(300px, 0px);
+          transform:translate(300px, 0px);
+}
+.off {
+  -webkit-transform:translate(0px, 0px);
+     -moz-transform:translate(0px, 0px);
+      -ms-transform:translate(0px, 0px);
+       -o-transform:translate(0px, 0px);
+          transform:translate(0px, 0px);
+}
+.show-pane {
+  position: fixed;
+  width: 40px;
+  top: 50%;
+  margin-top: -50px;
+  left: -35px;
+  background-color: #2AAF4C;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 14px;
+  padding: 20px 5px;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+  z-index: 900;
+  -webkit-transition:all 0.2s ease-in-out !important;
+     -moz-transition:all 0.2s ease-in-out !important;
+      -ms-transition:all 0.2s ease-in-out !important;
+       -o-transition:all 0.2s ease-in-out !important;
+          transition:all 0.2s ease-in-out !important;
+}
+.show-pane:hover { text-decoration: none; left: -20px;}
+.side-nav {
+  display:table; 
+  width: 100%; 
+  height: 100%; 
+  overflow:hidden; 
+  _position:relative; 
+}
+.vertical-middle { 
+  background-color: white;
+  vertical-align:middle; 
+  display:table-cell; 
+  _position:absolute; 
+  _top:50%; 
+  _left:50%; 
+}
+.navbar {
+  background-color: white; 
+  display:inline-block; 
+  _position:relative; 
+  _top:-50%; 
+  _left:-50%; 
+  border-radius: 5px;
+}
+.url-list {
+  width: 100%;
+  list-style: none;
+  font-size: 12px;
+}
+.navbar > li {
+  font: 13px "微软雅黑","Arial","Helvetica","sans-serif";
+  text-align: left;
+  padding: 7px 15px;
+  padding-left: 15px;
+  border-left: 5px solid white;
+}
+.url-cell {
+  border-top: 1px dotted;
+  padding: 5px;
+  cursor: pointer;
+}
+.url-cell:hover { background-color: #EEEEEE;}
+.navbar span {
+  margin-right: 10px;
+}
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  padding-right: 8px;
+  padding-left: 8px;
+  color: white;
+  background-color: red;
+}
+.close:hover { color: red;}
+
+/* header */
+.danlv { background-color: #2B9646;}
+.header { max-width: 1181px;}
+div.search {
+  background: #fff;
+  height: 35px;
+  padding-bottom: 6px;
+  padding-right: 8px;
+  padding-top: 7px;
+  border-bottom: 1px solid #E5E5E5;
+  padding-left: 8px;
+}    
+div.msb { margin-left: 0; position: relative; width: 100%;}
+div.msfo { padding-right: 38px;}
+.mlogo {
+  background-image: url(data:image/png;base64,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);
+  height: 26px;
+  left: 9px;
+  position: absolute;
+  text-align: center;
+  text-decoration: none;
+  top: 8px;
+  width: 75px;
+  font-size: 19px;
+  font-family: WenQuanYi Micro Hei, Arial, Helvetica, Microsoft Yahei,sans-serif;
+  letter-spacing: 0px;
+  line-height: 19px;
+  font-weight: 700;
+  color: #2B9646;
+}
+.mlogo:hover { text-decoration: none;}
+#btn-go {
+  -webkit-border-radius: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #2B9646;
+  border: 1px solid #2B9646;
+  color: white;
+  box-sizing: border-box;
+  -webkit-border-bottom-right-radius: 2px;
+  -webkit-border-top-right-radius: 2px;
+  height: 37px;
+  width: 38px
+}
+button#btn-go:hover { opacity: 1;}
+.msfi {
+  margin-left: 102px;
+  background-color: #fff !important;
+  border-color: #c7d6f7;
+  border-style: solid;
+  border-width: 2px 1px 2px 2px;
+  border-right: none;
+  margin-top: -1px;
+  padding: 0;
+  padding-right: 0;
+  height: 35px;
+  border: 1px solid #d9d9d9 !important;
+  border-right: none !important;
+  border-top: 1px solid silver !important;
+  padding-right: 10px;
+}
+.search-box {
+  width: 100%;
+  height: 100%;
+  border: 0px solid #cccccc;
+  padding: 0px 6px;
+  font-size: 12px;
+  margin: 0px !important;
+}
+.search-box:focus {
+  font-size: 12px!important;
+  border: 0px solid #2B9646; 
+  outline: 0;
+  outline: thin dotted \9;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(43, 150, 70, 0.32);
+     -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(43, 150, 70, 0.32);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 6px rgba(43, 150, 70, 0.32);
+}
+.search-box:hover {
+  border: 0px solid #d9d9d9;
+  outline: 0;
+  outline: thin dotted \9;
+}
+
+/* Responsive *\
+\* ========== */
+@media (max-width: 767px) {
+  .container { width: auto;}
+  .article h1.title { font-size: 32px;}
+  .ft { position: relative; left: 0px;}
+}
+

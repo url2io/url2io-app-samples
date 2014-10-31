@@ -1,4 +1,4 @@
-# url2io-app-samples
+# URL2io-app-samples
 
 app samples of using [URL2io API](http://www.url2io.com/docs)
 

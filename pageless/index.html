@@ -115,13 +115,14 @@
     var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
-        'url': 'http://url2api.sinaapp.com/article', /* or http://api.url2io.com/article */
-      //'url': 'http://localhost:8080/article',
+        'url': 'http://api.url2io.com/demo/article', /* 此为demo api，有调用频率限制。实际使用时使用 http://api.url2io.com/article */
+       // 'url': 'http://localhost:8080/demo/article',
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
           'url': url, 
           'fields': 'next',
+          'token': 'demo', // 用你的token替换
         },
         'success': callback, 
         'error': function(jqXHR, textStatus, errorThrown) {

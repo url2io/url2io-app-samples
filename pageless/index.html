@@ -241,7 +241,7 @@
               $('#article_template').mustache(data, {'page':$('#page_template').html()})
           );
           // render article json to show
-          //$('#json-wrap').remove();
+          delete data['page_number'];
           $('#json').html('').append(
               $('#article_json_template').mustache({'json': JSON.stringify(data, null, 4)})
           );
@@ -356,7 +356,7 @@
 
       // 是否?url=...
       var res = /\?url=(.*)/.exec(location.href);
-      if (res.length == 2) {
+      if (res && (res.length == 2)) {
         var url = decodeURIComponent(res[1]);
         $('#url').val(url);
         $('#fs').trigger('submit');

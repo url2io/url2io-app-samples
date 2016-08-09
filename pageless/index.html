@@ -23,18 +23,98 @@
     </form>
   </div>
 </div>
+<style>
+  #myTab {
+    margin-left: 0px;
+  }
+  .nav {
+    margin-bottom: 20px;
+    margin-left: 0px;
+    padding: 0;
+    margin: 0 0 10px 25px;
+  }
+  .nav-tabs {
+    border-bottom: 1px solid #ddd;
+  }
+  .nav-tabs:before, .nav-tabs:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+  .nav-tabs:after {
+    clear: both;
+  }
+  .nav-tabs>li {
+    margin-bottom: -1px;
+    float: left;
+    line-height: 20px;
+    list-style: none;
+  }
+  .nav-tabs>li>a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height: 20px;
+    border: 1px solid transparent;
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: 2px;
+  }
+  .nav-tabs>li>a { 
+    display: block;
+    text-decoration: none;
+  }
+  .nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
+  }
+  .nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+  }
+  .tab-content>.tab-pane {
+    display: none;
+  }
+  .tab-content>.active {
+    display: block;
+  }
+</style>
 <!-- article 
      ======= -->
 <div class="container typo">
-  <div id="article" class='article'><div id="pageless-wrap">
-    <!-- pages -->
-    <div style="text-align:center;font-size:30px;color:#2B9646;vertical-align:middle;margin-top:50px;">
-      Code on Github
-      <a href="http://github.com/url2io/url2io-app-samples" target="_blank">
-        <img src="./github.png" width='200px' alt="" />
-      </a>
-    </div>
-  </div></div><!-- /.article -->
+  <ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a id="tab_visual" href="#visual">可视化</a></li>
+    <li><a id="tab_json" href="#json">JSON</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Visual -->
+    <div class="tab-pane active" id="visual">
+      <div id="article" class='article'><div id="pageless-wrap">
+        <!-- pages -->
+        <div style="text-align:center;font-size:30px;color:#2B9646;vertical-align:middle;margin-top:50px;">
+          Code on Github
+          <a href="http://github.com/url2io/url2io-app-samples" target="_blank">
+            <img src="./github.png" width='200px' alt="" />
+          </a>
+        </div>
+      </div></div><!-- /.article -->
+    </div><!-- /.visual -->
+
+    <!-- JSON -->
+    <div class="tab-pane" id="json">
+      <code>
+        {
+          "hello": "world";
+        }
+      </code>
+    </div><!-- /.json -->
+  </div><!-- /.tab-content -->
   <img src="./loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
 </div>
 <!-- url-list-pane 
@@ -79,6 +159,13 @@
        <center>Powered by <a href="http://www.url2io.com" target='_blank'>URL2io</a></center>
      </div>
   </div>
+</script>
+
+<!-- 模板  article api json -->
+<script type="text/template" id='article_json_template'>
+<code>
+{{json}}
+</code>
 </script>
 
 <!-- 模板 page -->
@@ -148,10 +235,15 @@
           page_number = 1;
           data['page_number'] = page_number;
 
-          // render to show
+          // render article to show
           $('#article').append(
               check_error(data) || 
               $('#article_template').mustache(data, {'page':$('#page_template').html()})
+          );
+          // render article json to show
+          //$('#json-wrap').remove();
+          $('#json').html('').append(
+              $('#article_json_template').mustache({'json': JSON.stringify(data, null, 4)})
           );
 
           // next
@@ -230,11 +322,45 @@
       function close_pane() {
           $('.url-list-pane').removeClass('on').addClass('off');
       }
+      // tab pane
+      function show_tabpane($a) {
+        if (!$a.hasClass('active')) {
+          var tablabels = $a.parents('ul').find('li');
+          var tablepanes = $('.tab-pane');
+          for (var i=0; i<tablabels.length; i++) {
+            $(tablabels[i]).removeClass('active');
+            $(tablepanes[i]).removeClass('active');
+          }
+          var tablepane_id = '#'+$a.attr('id').split('_')[1];
+          $a.parent('li').addClass('active');
+          $(tablepane_id).addClass('active');
+        }
+        else
+          return false;
+      }
+      $('#tab_visual').on('click', function(e) {
+          e.stopPropagation();
+          show_tabpane($(this));
+          return false;
+      });
+      $('#tab_json').on('click', function(e) {
+          e.stopPropagation();
+          show_tabpane($(this));
+          return false;
+      });
       $(document).on('click', close_pane);
       $('#close').on('click', function(e) {
           e.stopPropagation();
           close_pane();
       });
+
+      // 是否?url=...
+      var res = /\?url=(.*)/.exec(location.href);
+      if (res.length == 2) {
+        var url = decodeURIComponent(res[1]);
+        $('#url').val(url);
+        $('#fs').trigger('submit');
+      }
   };
 </script>
 
@@ -242,10 +368,10 @@
 <style type="text/css">
   a[href="http://tongji.baidu.com/hm-web/welcome/ico?s=4f7a60a53518cfb2c2bd73e668a1b756"]{display:none;}
 </style>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
 document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F4f7a60a53518cfb2c2bd73e668a1b756' type='text/javascript'%3E%3C/script%3E"));
-</script>
+</script> -->
 
 </body>
 </html>

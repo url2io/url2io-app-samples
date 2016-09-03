@@ -2,10 +2,12 @@
 <html lang='zh-CN'>
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <meta content="True" name="HandheldFriendly">
   <meta name='viewport' content='width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'>
   <meta name='format-detection' content='telephone=no'>
   <title>pageless | URL2io</title>
   <link rel="stylesheet" href="./pageless.css" />
+  <meta name="description" content="Pageless演示了如何使用URL2Article服务来提取网页正文，如果文章被分成多页则合并成一页">
 </head>
 <body>
 <div class='header danlv'>
@@ -110,7 +112,11 @@
     <div class="tab-pane" id="json">
       <code>
         {
-          "hello": "world";
+            "url": "",
+            "date": "",
+            "next": "",
+            "content": "",
+            "title": ""
         }
       </code>
     </div><!-- /.json -->
@@ -128,12 +134,11 @@
   <ul class="url-list navbar">
     <li class="url-cell" src-data="http://tech.sina.com.cn/i/2010-08-18/19554560539.shtml">Web已死 Internet永生 -《连线》杂志</li>
     <li class="url-cell" src-data="http://www.qiushibaike.com/">8小时内最尴尬糗事::糗事百科</li>
-    <li class="url-cell" src-data="http://www.36kr.com">36氪 | 关注互联网创业</li>
   </ul>
   <h5 style='color:#66bc4e'>正文提取</h5>
   <ul class="url-list navbar">
     <li class="url-cell" src-data="http://www.url2io.com/docs">URL2io API文档</li>
-    <li class="url-cell" src-data="http://typo.sofi.sh/">中文网页重设与排版：TYPO.CSS</li>
+    <!-- <li class="url-cell" src-data="http://typo.sofi.sh/">中文网页重设与排版：TYPO.CSS</li> -->
     <li class="url-cell" src-data="http://select.yeeyan.org/view/338874/352344">别了,Google Reader</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208498.html">Oculus Rift的性感极客们到底是如何破解晕眩感的</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208636.html">为什么这八家机器人公司可以吸引Andy Rubin，你了解它们吗？</li>

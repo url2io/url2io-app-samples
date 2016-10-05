@@ -2,13 +2,27 @@
 <html lang='zh-CN'>
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <meta content="True" name="HandheldFriendly">
   <meta name='viewport' content='width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no'>
   <meta name='format-detection' content='telephone=no'>
   <title>pageless | URL2io</title>
   <link rel="stylesheet" href="./pageless.css" />
+  <meta name="description" content="Pageless演示了如何使用URL2Article服务来提取网页正文，如果文章被分成多页则合并成一页">
+<!-- GA -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-84535934-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 </head>
 <body>
-<div class='header danlv'>
+<div class='header'>
   <div class='search'>
     <form id='fs' onsubmit='add_article($("#url").val());return false;'>
     <div class='msb'>
@@ -23,18 +37,102 @@
     </form>
   </div>
 </div>
+<style>
+  #myTab {
+    margin-left: 0px;
+  }
+  .nav {
+    margin-bottom: 20px;
+    margin-left: 0px;
+    padding: 0;
+    margin: 0 0 10px 25px;
+  }
+  .nav-tabs {
+    border-bottom: 1px solid #ddd;
+  }
+  .nav-tabs:before, .nav-tabs:after {
+    display: table;
+    line-height: 0;
+    content: "";
+  }
+  .nav-tabs:after {
+    clear: both;
+  }
+  .nav-tabs>li {
+    margin-bottom: -1px;
+    float: left;
+    line-height: 20px;
+    list-style: none;
+  }
+  .nav-tabs>li>a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height: 20px;
+    border: 1px solid transparent;
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
+    padding-right: 12px;
+    padding-left: 12px;
+    margin-right: 2px;
+  }
+  .nav-tabs>li>a { 
+    display: block;
+    text-decoration: none;
+  }
+  .nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
+  }
+  .nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+  }
+  .tab-content>.tab-pane {
+    display: none;
+  }
+  .tab-content>.active {
+    display: block;
+  }
+</style>
 <!-- article 
      ======= -->
 <div class="container typo">
-  <div id="article" class='article'><div id="pageless-wrap">
-    <!-- pages -->
-    <div style="text-align:center;font-size:30px;color:#2B9646;vertical-align:middle;margin-top:50px;">
-      Code on Github
-      <a href="http://github.com/url2io/url2io-app-samples" target="_blank">
-        <img src="./github.png" width='200px' alt="" />
-      </a>
-    </div>
-  </div></div><!-- /.article -->
+  <ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a id="tab_visual" href="#visual">可视化</a></li>
+    <li><a id="tab_json" href="#json">JSON</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Visual -->
+    <div class="tab-pane active" id="visual">
+      <div id="article" class='article'><div id="pageless-wrap">
+        <!-- pages -->
+        <div style="text-align:center;font-size:30px;color:#2B9646;vertical-align:middle;margin-top:50px;margin-bottom:50px;">
+          Code on Github
+          <a href="http://github.com/url2io/url2io-app-samples" target="_blank">
+            <img src="./github.png" width='200px' alt="" />
+          </a>
+        </div>
+      </div></div><!-- /.article -->
+    </div><!-- /.visual -->
+
+    <!-- JSON -->
+    <div class="tab-pane" id="json">
+      <code>
+        {
+            "url": "",
+            "date": "",
+            "next": "",
+            "content": "",
+            "title": ""
+        }
+      </code>
+    </div><!-- /.json -->
+  </div><!-- /.tab-content -->
   <img src="./loading.gif" id='loading' alt="" style='display:none;margin:auto;left:0;right:0;'/>
 </div>
 <!-- url-list-pane 
@@ -48,12 +146,11 @@
   <ul class="url-list navbar">
     <li class="url-cell" src-data="http://tech.sina.com.cn/i/2010-08-18/19554560539.shtml">Web已死 Internet永生 -《连线》杂志</li>
     <li class="url-cell" src-data="http://www.qiushibaike.com/">8小时内最尴尬糗事::糗事百科</li>
-    <li class="url-cell" src-data="http://www.36kr.com">36氪 | 关注互联网创业</li>
   </ul>
   <h5 style='color:#66bc4e'>正文提取</h5>
   <ul class="url-list navbar">
     <li class="url-cell" src-data="http://www.url2io.com/docs">URL2io API文档</li>
-    <li class="url-cell" src-data="http://typo.sofish.de/">中文网页重设与排版：TYPO.CSS</li>
+    <!-- <li class="url-cell" src-data="http://typo.sofi.sh/">中文网页重设与排版：TYPO.CSS</li> -->
     <li class="url-cell" src-data="http://select.yeeyan.org/view/338874/352344">别了,Google Reader</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208498.html">Oculus Rift的性感极客们到底是如何破解晕眩感的</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208636.html">为什么这八家机器人公司可以吸引Andy Rubin，你了解它们吗？</li>
@@ -79,6 +176,13 @@
        <center>Powered by <a href="http://www.url2io.com" target='_blank'>URL2io</a></center>
      </div>
   </div>
+</script>
+
+<!-- 模板  article api json -->
+<script type="text/template" id='article_json_template'>
+<code>
+{{json}}
+</code>
 </script>
 
 <!-- 模板 page -->
@@ -115,14 +219,14 @@
     var repeat = repeat || (repeat == 0 ? 0 : 1);
     $.ajax({
         'type': 'get',
-        'url': 'http://api.url2io.com/demo/article', /* 此为demo api有调用频率限制，实际使用时用 http://api.url2io.com/article */
+        'url': 'http://api.url2io.com/demo/article', /* 此为demo api，有调用频率限制。实际使用时使用 http://api.url2io.com/article */
        // 'url': 'http://localhost:8080/demo/article',
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
           'url': url, 
           'fields': 'next',
-          'token': 'demo', // 替换为你的token
+          'token': 'demo', // 用你的token替换
         },
         'success': callback, 
         'error': function(jqXHR, textStatus, errorThrown) {
@@ -148,10 +252,15 @@
           page_number = 1;
           data['page_number'] = page_number;
 
-          // render to show
+          // render article to show
           $('#article').append(
               check_error(data) || 
               $('#article_template').mustache(data, {'page':$('#page_template').html()})
+          );
+          // render article json to show
+          delete data['page_number'];
+          $('#json').html('').append(
+              $('#article_json_template').mustache({'json': JSON.stringify(data, null, 4)})
           );
 
           // next
@@ -230,12 +339,56 @@
       function close_pane() {
           $('.url-list-pane').removeClass('on').addClass('off');
       }
+      // tab pane
+      function show_tabpane($a) {
+        if (!$a.hasClass('active')) {
+          var tablabels = $a.parents('ul').find('li');
+          var tablepanes = $('.tab-pane');
+          for (var i=0; i<tablabels.length; i++) {
+            $(tablabels[i]).removeClass('active');
+            $(tablepanes[i]).removeClass('active');
+          }
+          var tablepane_id = '#'+$a.attr('id').split('_')[1];
+          $a.parent('li').addClass('active');
+          $(tablepane_id).addClass('active');
+        }
+        else
+          return false;
+      }
+      $('#tab_visual').on('click', function(e) {
+          e.stopPropagation();
+          show_tabpane($(this));
+          return false;
+      });
+      $('#tab_json').on('click', function(e) {
+          e.stopPropagation();
+          show_tabpane($(this));
+          return false;
+      });
       $(document).on('click', close_pane);
       $('#close').on('click', function(e) {
           e.stopPropagation();
           close_pane();
       });
+
+      // 是否?url=...
+      var res = /\?url=(.*)/.exec(location.href);
+      if (res && (res.length == 2)) {
+        var url = decodeURIComponent(res[1]);
+        $('#url').val(url);
+        $('#fs').trigger('submit');
+      }
   };
 </script>
+
+<!-- baidu tongji -->
+<style type="text/css">
+  a[href="http://tongji.baidu.com/hm-web/welcome/ico?s=4f7a60a53518cfb2c2bd73e668a1b756"]{display:none;}
+</style>
+<!-- <script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F4f7a60a53518cfb2c2bd73e668a1b756' type='text/javascript'%3E%3C/script%3E"));
+</script> -->
+
 </body>
 </html>

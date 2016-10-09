@@ -1,7 +1,8 @@
 # URL2io-app-samples
 
-App samples of using [URL2io API](http://www.url2io.com/docs)
+App samples of using [URL2io API](http://www.url2io.com/docs).
 
+If you have any examples for other APIs, let us know and we will happily add a link to the README above!
 
 # Samples
 

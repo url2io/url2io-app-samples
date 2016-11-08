@@ -3,7 +3,7 @@
 Pageless 演示了如何使用 [URL2Article API](http://www.url2io.com/products#url2article) 提取网页文章，如果文章被分成多页则合并成一页。
 
 
-![](https://raw.githubusercontent.com/url2io/url2io-app-samples/master/pageless/pageless.png)
+![](https://i.v2ex.co/n87a5I0O.png)
 
 #TODO
 

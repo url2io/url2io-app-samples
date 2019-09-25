@@ -29,7 +29,8 @@
       <div class="msfo">
         <a class='mlogo' href>  </a>
         <div class="msfi">
-          <input id="url" name='url' class='search-box' type="text" placeholder='输入url...' value='http://www.url2io.com/products'/>
+          <input id="url" name='url' class='search-box' type="text" placeholder='输入 url...' />
+                 <!--value='http://www.url2io.com/products'/>-->
         </div>
       </div><!-- /.msfo -->
       <button id='btn-go' >GO</button>
@@ -48,7 +49,7 @@
     margin: 0 0 10px 25px;
   }
   .nav-tabs {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd5c;
   }
   .nav-tabs:before, .nav-tabs:after {
     display: table;
@@ -105,11 +106,10 @@
     <li class="active"><a id="tab_visual" href="#visual">可视化</a></li>
     <li><a id="tab_json" href="#json">JSON</a></li>
   </ul>
-
   <div class="tab-content">
-    <!-- Visual -->
+    <!-- tab: Visual -->
     <div class="tab-pane active" id="visual">
-      <div id="article" class='article'><div id="pageless-wrap">
+      <div id="article" class='article'><div id="pageless-wrap" contenteditable="false">
         <!-- pages -->
         <div style="text-align:center;font-size:30px;color:#2B9646;vertical-align:middle;margin-top:50px;margin-bottom:50px;">
           Code on Github
@@ -119,8 +119,7 @@
         </div>
       </div></div><!-- /.article -->
     </div><!-- /.visual -->
-
-    <!-- JSON -->
+    <!-- tab: JSON -->
     <div class="tab-pane" id="json">
       <code>
         {
@@ -149,7 +148,7 @@
   </ul>
   <h5 style='color:#66bc4e'>正文提取</h5>
   <ul class="url-list navbar">
-    <li class="url-cell" src-data="http://www.url2io.com/docs">URL2io API文档</li>
+    <li class="url-cell" src-data="http://url2io.applinzi.com/docs">URL2io API文档</li>
     <!-- <li class="url-cell" src-data="http://typo.sofi.sh/">中文网页重设与排版：TYPO.CSS</li> -->
     <li class="url-cell" src-data="http://select.yeeyan.org/view/338874/352344">别了,Google Reader</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208498.html">Oculus Rift的性感极客们到底是如何破解晕眩感的</li>
@@ -185,11 +184,19 @@
 </code>
 </script>
 
-<!-- 模板 page -->
-<script type="text/template" id="page_template" >
+<!-- 模板 html page -->
+<script type="text/template" id="html_page_template" >
   <div id="page{{page_number}}" class='content page'>
     <div class='ft'> {{page_number}} </div>
     {{&content}}
+  </div>
+</script>
+
+<!-- 模板 text page -->
+<script type="text/template" id="text_page_template" >
+  <div id="page{{page_number}}" class='content page'>
+    <div class='ft'> {{page_number}} </div>
+    <p style="white-space: pre-wrap;">{{text}}</p>
   </div>
 </script>
 
@@ -213,20 +220,33 @@
 <script type='text/javascript' src='http://blog.url2io.com/url2io-app-samples/static/js/jquery.mustache.js'></script>
 <script type="text/javascript">
   var page_number;
+  
+  var api_url = 'http://url2api.applinzi.com';
+  var fields = 'next';
+  var token = 'demo'
+
+  function getQueryString(name, default_value) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+      return decodeURIComponent(r[2]);
+    return default_value;
+  }
 
   // 调用 URL2Article API 提取网页正文、下一页链接
   function get_data(url, callback, repeat) {
     var repeat = repeat || (repeat == 0 ? 0 : 1);
+    var api = token === 'demo' ? api_url + '/demo/article' : '/article';
     $.ajax({
         'type': 'get',
-        'url': 'http://url2api.applinzi.com/demo/article', /* 此为demo api，有调用频率限制。实际使用时使用 http://url2api.applinzi.com/article */
+        'url': api, /* 此为demo api，有调用频率限制。实际使用时使用 http://url2api.applinzi.com/demo/article */
        // 'url': 'http://localhost:8080/demo/article',
         'dataType': 'jsonp',
         'timeout': 30000,
         'data': {
           'url': url, 
-          'fields': 'next',
-          'token': 'demo', // 用你的token替换
+          'fields': fields,
+          'token': token, // 用你的token替换
         },
         'success': callback, 
         'error': function(jqXHR, textStatus, errorThrown) {
@@ -242,6 +262,13 @@
     });
   }
 
+  // 获取文章页模版
+  function get_page_template(data) {
+    return data['content'] === undefined ?
+      $("#text_page_template") :
+      $("#html_page_template");
+  }
+
   // 添加文章到页面
   function add_article(url) {
       // disable the previous article's pageless_scroll_handler
@@ -255,7 +282,9 @@
           // render article to show
           $('#article').append(
               check_error(data) || 
-              $('#article_template').mustache(data, {'page':$('#page_template').html()})
+              $('#article_template').mustache(data, {
+                'page': get_page_template(data).html()
+              })
           );
           // render article json to show
           delete data['page_number'];
@@ -278,7 +307,7 @@
           data['page_number'] = ++page_number;
 
           // render to show
-          var page = check_error(data) || $("#page_template").mustache(data);
+          var page = check_error(data) || get_page_template(data).mustache(data);
           page.insertAfter(pre_page);
 
           // next
@@ -371,13 +400,15 @@
           close_pane();
       });
 
-      // 是否?url=...
-      var res = /\?url=(.*)/.exec(location.href);
-      if (res && (res.length == 2)) {
-        var url = decodeURIComponent(res[1]);
+      // 初始化参数
+      var url = getQueryString('url', null);
+      if (url) {
         $('#url').val(url);
         $('#fs').trigger('submit');
       }
+      api_url = getQueryString('api_url', api_url);
+      fields = getQueryString('fields', fields);
+      token = getQueryString('token', token);
   };
 </script>
 

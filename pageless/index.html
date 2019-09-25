@@ -236,7 +236,12 @@
   // 调用 URL2Article API 提取网页正文、下一页链接
   function get_data(url, callback, repeat) {
     var repeat = repeat || (repeat == 0 ? 0 : 1);
-    var api = token === 'demo' ? api_url + '/demo/article' : '/article';
+    if (token === 'demo') {
+      var api = api_url + '/demo/article';
+    }
+    else {
+      var api = api_url + '/article';
+    }
     $.ajax({
         'type': 'get',
         'url': api, /* 此为demo api，有调用频率限制。实际使用时使用 http://url2api.applinzi.com/demo/article */

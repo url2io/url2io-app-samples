@@ -176,7 +176,7 @@ div.search {
   padding-bottom: 6px;
   padding-right: 8px;
   padding-top: 7px;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid #e5e5e56e;
   padding-left: 8px;
 }    
 div.msb { margin-left: 0; position: relative; width: 100%;}
@@ -225,9 +225,9 @@ button#btn-go:hover { opacity: 1;}
   padding: 0;
   padding-right: 0;
   height: 35px;
-  border: 1px solid #d9d9d9 !important;
+  border: 1px solid #d9d9d970 !important;
   border-right: none !important;
-  border-top: 1px solid silver !important;
+  border-top: 1px solid #c0c0c038 !important;
   padding-right: 10px;
 }
 .search-box {

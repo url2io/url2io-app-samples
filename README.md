@@ -1,6 +1,6 @@
 # URL2io-app-samples
 
-App samples of using [URL2io API](http://www.url2io.com/docs).
+App samples of using [URL2io API](http://url2io.applinzi.com/docs).
 
 If you have any examples for other APIs, let us know and we will happily add a link to the README above!
 
@@ -14,4 +14,4 @@ Sample | API or feature | Screenshot | Link
 
 API or feature | Samples
 --- | ---
-[URL2Article](http://www.url2io.com/docs#url2article) | <a href="https://github.com/url2io/url2io-app-samples/tree/master/pageless">pageless</a> 
+[URL2Article](http://url2io.applinzi.com/docs#url2article) | <a href="https://github.com/url2io/url2io-app-samples/tree/master/pageless">pageless</a> 

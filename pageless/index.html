@@ -29,7 +29,7 @@
       <div class="msfo">
         <a class='mlogo' href>  </a>
         <div class="msfi">
-          <input id="url" name='url' class='search-box' type="text" placeholder='输入url...' value='http://www.url2io.com/products'/>
+          <input id="url" name='url' class='search-box' type="text" placeholder='输入url...' value='http://url2io.applinzi.com/products'/>
         </div>
       </div><!-- /.msfo -->
       <button id='btn-go' >GO</button>
@@ -147,7 +147,7 @@
   </ul>
   <h5 style='color:#66bc4e'>正文提取</h5>
   <ul class="url-list navbar">
-    <li class="url-cell" src-data="http://www.url2io.com/docs">URL2io API文档</li>
+    <li class="url-cell" src-data="http://url2io.applinzi.com/docs">URL2io API文档</li>
     <!-- <li class="url-cell" src-data="http://typo.sofi.sh/">中文网页重设与排版：TYPO.CSS</li> -->
     <li class="url-cell" src-data="http://select.yeeyan.org/view/338874/352344">别了,Google Reader</li>
     <li class="url-cell" src-data="http://www.36kr.com/p/208498.html">Oculus Rift的性感极客们到底是如何破解晕眩感的</li>
@@ -215,9 +215,10 @@
   // 调用 URL2Article API 提取网页正文、下一页链接
   function get_data(url, callback, repeat) {
     var repeat = repeat || (repeat == 0 ? 0 : 1);
+    var protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
     $.ajax({
         'type': 'get',
-        'url': 'http://api.url2io.com/demo/article', /* 此为demo api，有调用频率限制。实际使用时使用 http://api.url2io.com/article */
+        'url': protocol + 'api.url2io.com/demo/article', /* 此为demo api，有调用频率限制。实际使用时使用 http://api.url2io.com/article */
        // 'url': 'http://localhost:8080/demo/article',
         'dataType': 'jsonp',
         'timeout': 30000,
